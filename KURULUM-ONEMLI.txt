@@ -1,0 +1,13 @@
+DORA BERLIN - ÖDEME ENTEGRASYONU İLK GELİŞTİRME PAKETİ
+
+BU PAKET HENÜZ CANLIYA ALINMAMALI. Gerçek kartla test edilmedi.
+1. SUPABASE-ODEME-KURULUM.sql mevcut orders şeması incelendikten sonra uygulanmalı.
+2. Netlify ortamında IYZICO_API_KEY, IYZICO_SECRET_KEY, SUPABASE_URL, SUPABASE_SECRET_KEY olmalı.
+3. IYZICO_BASE_URL sandbox-api.iyzipay.com varsayılanıdır; canlıya ancak sandbox testlerinden sonra geçilmeli.
+4. Sepetteki ürünlerin Supabase products tablosunda aktif, stoklu ve TRY fiyatlı olması gerekir.
+5. Demo sabit ürünler için ödeme başlatılmaz; fiyatlar yalnızca Supabase'den okunur.
+6. İyzico testleri, callback doğrulaması, mükerrer istek, fiyat ve stok senaryoları henüz yapılmadı.
+7. Kargo bedeli geçici 0 TL; işletme kargo politikası netleştirilmeden canlıya geçmeyin.
+8. iyzico buyer.identityNumber alanında örnek değer var; gerçek uyum gereksinimi netleştirilmeden canlıya geçmeyin.
+9. Sipariş verileri ve gizlilik / mesafeli satış metinleri hukuk ve KVKK açısından kontrol edilmeli.
+10. Supabase orders mevcut kolonlarıyla uyum kontrol edilmeli.

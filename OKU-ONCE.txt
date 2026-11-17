@@ -1,0 +1,6 @@
+DORA BERLIN KOLEKSIYON ONIZLEMESI
+
+index.html dosyasini acarak 36 urunluk katalogu inceleyin.
+21 farkli urun modeli gorseli ve 15 varyasyon bulunur. Varyasyonlar ayni model fotografini kullanir; renkleri fotograflarda birebir degismez.
+Bu surum canli Supabase katalogunu cekmez; admin.html orijinal dosyadan korunmustur.
+Gercek siparis ve odeme aktif degildir. CANLI NETLIFY SITESINE YUKLEMEYIN.
