@@ -27,11 +27,15 @@ export function html(title, message) {
 export async function db(env, path, options = {}) {
   const url = required(env, 'SUPABASE_URL').replace(/\/$/, '');
   const key = required(env, 'SUPABASE_SECRET_KEY');
+  // New sb_secret_* keys go only in the apikey header. Legacy service_role
+  // JWTs also use Authorization: Bearer for PostgREST. Supabase is retiring
+  // those JWT-based keys, so both formats are supported during migration.
+  const authorization = key.startsWith('sb_secret_') ? {} : { Authorization: `Bearer ${key}` };
   const response = await fetch(`${url}/rest/v1/${path}`, {
     ...options,
     headers: {
       apikey: key,
-      Authorization: `Bearer ${key}`,
+      ...authorization,
       'Content-Type': 'application/json',
       ...(options.headers || {}),
     },
