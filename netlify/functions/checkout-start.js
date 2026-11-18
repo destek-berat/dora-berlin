@@ -3,7 +3,7 @@ const Iyzipay=require('iyzipay');
 const headers={'Content-Type':'application/json','Cache-Control':'no-store'};
 const response=(status,data)=>({statusCode:status,headers,body:JSON.stringify(data)});
 function env(name){const v=process.env[name];if(!v)throw Error('Sunucu yapılandırması eksik: '+name);return v;}
-async function supabase(path,options={}){const url=env('SUPABASE_URL').replace(/\/$/,'');const key=env('SUPABASE_SECRET_KEY');const r=await fetch(url+'/rest/v1/'+path,{...options,headers:{apikey:key,Authorization:'Bearer '+key,'Content-Type':'application/json',...(options.headers||{})}});if(!r.ok)throw Error('Veritabanı hatası '+r.status);return r.status===204?null:r.json();}
+async function supabase(path,options={}){const url=env('SUPABASE_URL').replace(/\/$/,'');const key=env('SUPABASE_SECRET_KEY');const r=await fetch(url+'/rest/v1/'+path,{...options,headers:{apikey:key,Authorization:'Bearer '+key,'Content-Type':'application/json',...(options.headers||{})}});if(!r.ok)throw Error('Veritabanı hatası '+r.status);const body=await r.text();return body?JSON.parse(body):null;}
 function iyzi(){return new Iyzipay({apiKey:env('IYZICO_API_KEY'),secretKey:env('IYZICO_SECRET_KEY'),uri:process.env.IYZICO_BASE_URL||'https://sandbox-api.iyzipay.com'});}
 function initialize(client,body){return new Promise((resolve,reject)=>client.checkoutFormInitialize.create(body,(err,res)=>err?reject(err):resolve(res)));}
 exports.handler=async(event)=>{
