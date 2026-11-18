@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { webcrypto } from 'node:crypto';
 import { onRequestPost as start } from '../functions/api/checkout-start.js';
 import { onRequestPost as callback } from '../functions/api/checkout-callback.js';
+import { iyzico } from '../cloudflare/server.js';
 
 globalThis.crypto ||= webcrypto;
 const env = {
@@ -9,6 +10,8 @@ const env = {
   SUPABASE_SECRET_KEY: 'sb_secret_test',
   IYZICO_API_KEY: 'sandbox-test-key',
   IYZICO_SECRET_KEY: 'sandbox-test-secret',
+  IYZICO_LIVE_API_KEY: 'live-test-key',
+  IYZICO_LIVE_SECRET_KEY: 'live-test-secret',
 };
 
 function customer() {
@@ -48,7 +51,7 @@ globalThis.fetch = async (resource, options) => {
     attemptedOrderUpdates.push(JSON.parse(options.body));
     return new Response(null, { status: 204 });
   }
-  if (url.startsWith('https://sandbox-api.iyzipay.com/')) {
+  if (url.startsWith('https://sandbox-api.iyzipay.com/') || url.startsWith('https://api.iyzipay.com/')) {
     iyzicoCount++;
     const payload = JSON.parse(options.body);
     assert.equal(options.headers['x-iyzi-rnd'].length > 10, true);
@@ -57,7 +60,9 @@ globalThis.fetch = async (resource, options) => {
     const randomKey = options.headers['x-iyzi-rnd'];
     const signature = auth.split('&signature:')[1];
     const signingInput = randomKey + new URL(url).pathname + options.body;
-    const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(env.IYZICO_SECRET_KEY), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+    const secret = url.startsWith('https://api.iyzipay.com/') ? env.IYZICO_LIVE_SECRET_KEY : env.IYZICO_SECRET_KEY;
+    assert.ok(auth.includes(`apiKey:${url.startsWith('https://api.iyzipay.com/') ? env.IYZICO_LIVE_API_KEY : env.IYZICO_API_KEY}`));
+    const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
     const actual = Array.from(new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signingInput))), value => value.toString(16).padStart(2, '0')).join('');
     assert.equal(signature, actual);
     if (url.includes('/initialize/')) {
@@ -106,4 +111,10 @@ assert.match(await ambiguousResponse.text(), /İşlem kontrol ediliyor/);
 assert.equal(attemptedPayments.length, 1);
 assert.equal(database[0].status, 'pending');
 assert.equal(iyzicoCount, 3);
+await assert.rejects(() => iyzico({ ...env, IYZICO_MODE: 'live' }, '/test', {}), /Canlı ödeme henüz açık değil/);
+const liveResult = await iyzico({ ...env, IYZICO_MODE: 'live', LIVE_CHECKOUT_APPROVED: 'yes' }, '/payment/iyzipos/checkoutform/auth/ecom/detail', {
+  locale: 'tr', conversationId: database[0].id, token: 'test-token',
+});
+assert.equal(liveResult.paymentId, 'test-payment-id');
+await assert.rejects(() => iyzico({ ...env, IYZICO_MODE: 'invalid' }, '/test', {}), /Geçersiz/);
 console.log('Cloudflare Sandbox checkout: initialize, verified callback, ambiguous callback OK');
