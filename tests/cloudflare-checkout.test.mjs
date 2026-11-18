@@ -20,6 +20,7 @@ let paymentStatus = 'SUCCESS';
 let fraudStatus = 1;
 let iyzicoCount = 0;
 const attemptedPayments = [];
+const attemptedOrderUpdates = [];
 
 globalThis.fetch = async (resource, options) => {
   const url = String(resource);
@@ -42,6 +43,10 @@ globalThis.fetch = async (resource, options) => {
   if (url.includes('/orders') && options.method === 'POST') {
     attemptedPayments.push(JSON.parse(options.body));
     return new Response('', { status: 201 });
+  }
+  if (url.includes('/orders?payment_attempt_id=') && options.method === 'PATCH') {
+    attemptedOrderUpdates.push(JSON.parse(options.body));
+    return new Response(null, { status: 204 });
   }
   if (url.startsWith('https://sandbox-api.iyzipay.com/')) {
     iyzicoCount++;
@@ -83,6 +88,14 @@ const callbackResponse = await callback({ request: new Request('https://test.pag
 assert.match(await callbackResponse.text(), /Ödemeniz başarılı/);
 assert.equal(database[0].status, 'paid');
 assert.equal(attemptedPayments.length, 1);
+assert.equal(attemptedPayments[0].payment_status, 'paid');
+assert.equal(attemptedPayments[0].iyzico_payment_id, 'test-payment-id');
+
+const repeatCallback = await callback({ request: new Request('https://test.pages.dev/api/checkout-callback', {
+  method: 'POST', body: new URLSearchParams({ token: 'test-token' }),
+}), env });
+assert.match(await repeatCallback.text(), /Ödeme alındı/);
+assert.deepEqual(attemptedOrderUpdates[0], { payment_status: 'paid', iyzico_payment_id: 'test-payment-id' });
 
 database[0].status = 'pending';
 fraudStatus = 0;
