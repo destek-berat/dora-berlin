@@ -2,6 +2,15 @@
 // This module is deliberately outside /functions, so it is not an HTTP route.
 
 const SANDBOX_BASE = 'https://sandbox-api.iyzipay.com';
+const LIVE_BASE = 'https://api.iyzipay.com';
+
+export function iyzicoMode(env) {
+  // Production payments require an explicit opt-in. Adding live credentials
+  // alone never changes the active sandbox payment flow.
+  const mode = String(env.IYZICO_MODE || 'sandbox').trim().toLowerCase();
+  if (mode !== 'sandbox' && mode !== 'live') throw new Error('Geçersiz iyzico çalışma modu');
+  return mode;
+}
 
 export function required(env, name) {
   const value = env[name];
@@ -46,11 +55,13 @@ export async function db(env, path, options = {}) {
 }
 
 export async function iyzico(env, endpoint, data) {
-  const apiKey = required(env, 'IYZICO_API_KEY');
-  const secretKey = required(env, 'IYZICO_SECRET_KEY');
-  // Never accidentally charge a live card while this migration is being tested.
-  const base = env.IYZICO_BASE_URL || SANDBOX_BASE;
-  if (base !== SANDBOX_BASE) throw new Error('Bu sürüm yalnızca iyzico Sandbox içindir');
+  const mode = iyzicoMode(env);
+  if (mode === 'live' && env.LIVE_CHECKOUT_APPROVED !== 'yes') {
+    throw new Error('Canlı ödeme henüz açık değil');
+  }
+  const base = mode === 'live' ? LIVE_BASE : SANDBOX_BASE;
+  const apiKey = required(env, mode === 'live' ? 'IYZICO_LIVE_API_KEY' : 'IYZICO_API_KEY');
+  const secretKey = required(env, mode === 'live' ? 'IYZICO_LIVE_SECRET_KEY' : 'IYZICO_SECRET_KEY');
   const body = JSON.stringify(data);
   const randomKey = crypto.randomUUID().replaceAll('-', '');
   const signingText = `${randomKey}${endpoint}${body}`;
