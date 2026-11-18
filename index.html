@@ -23,7 +23,7 @@ async function previewCheckout(){
  const name=document.getElementById('co-name').value.trim(),phone=document.getElementById('co-phone').value.trim(),email=document.getElementById('co-email').value.trim(),address=document.getElementById('co-address').value.trim(),city=document.getElementById('co-city').value.trim(),district=document.getElementById('co-district').value.trim();
  if(name.split(/\s+/).length<2||!email.includes('@')||phone.replace(/\D/g,'').length<10||!address||!city||!district){el.textContent='Lütfen ad soyad, telefon, e-posta ve teslimat adresini doldurun.';return;}
  const btn=document.querySelector('.checkout-submit');btn.disabled=true;el.textContent='Güvenli ödeme hazırlanıyor…';
- try{const response=await fetch('/.netlify/functions/checkout-start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:cart.map(x=>({id:x.id,qty:x.qty})),customer:{name,phone,email,address,city,district}})});const result=await response.json();if(!response.ok||!result.paymentPageUrl)throw Error(result.error||'Ödeme başlatılamadı');window.location.assign(result.paymentPageUrl);}catch(e){el.textContent=e.message||'Ödeme başlatılamadı';btn.disabled=false;}
+ try{const response=await fetch('/api/checkout-start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:cart.map(x=>({id:x.id,qty:x.qty})),customer:{name,phone,email,address,city,district}})});const result=await response.json();if(!response.ok||!result.paymentPageUrl)throw Error(result.error||'Ödeme başlatılamadı');window.location.assign(result.paymentPageUrl);}catch(e){el.textContent=e.message||'Ödeme başlatılamadı';btn.disabled=false;}
 }
 
 // DORA BERLIN — public, read-only Supabase catalog integration.
