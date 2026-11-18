@@ -39,18 +39,26 @@ async function loadSupabaseProducts(){
   if(!response.ok)throw new Error('Supabase HTTP '+response.status+' '+(await response.text()).slice(0,180));
   const rows=await response.json();
   if(!Array.isArray(rows))throw new Error('Ürün listesi alınamadı');
-  const fallback=products[0]?.img||'';
+  const fallback='assets/koleksiyon/yeni-01.webp';
   const incoming=rows.filter(r=>r&&r.name&&Number.isFinite(Number(r.price))).map(r=>({
-   id:-Math.abs(Number(r.id)),name:String(r.name),category:String(r.category||'Aksesuarlar'),
-   color:String(r.color||'Krem'),price:Number(r.price),img:typeof r.image_url==='string'&&/^https:\/\//i.test(r.image_url)?r.image_url:fallback,
+   id:Number(r.id),name:String(r.name),category:String(r.category||'Aksesuarlar'),
+   color:String(r.color||'Krem'),price:Number(r.price),img:typeof r.image_url==='string'&&/^https:\/\//i.test(r.image_url)?r.image_url:(doraLocalImagesById.get(Number(r.id))||doraLocalImagesByName.get(String(r.name).toLocaleLowerCase('tr-TR').split(' (')[0])||fallback),
    description:String(r.description||''),stock:Number(r.stock||0),source:'supabase'
-  })).filter(p=>Number.isSafeInteger(p.id)&&p.id<0);
-  products=products.filter(p=>p.source!=='supabase').concat(incoming);
+  })).filter(p=>Number.isSafeInteger(p.id)&&p.id>0);
+  products=incoming;
+  cart=cart.filter(x=>products.some(p=>p.id===x.id));
   if(notice)notice.textContent=incoming.length?'Yönetim panelinden '+incoming.length+' aktif ürün yüklendi.':'Supabase bağlantısı kuruldu; henüz yayınlanmış ürün bulunamadı.';
   render();save();
  }catch(err){console.error('DORA BERLIN Supabase ürün senkronizasyonu:',err);
   if(notice)notice.textContent='Yönetim paneli ürünleri şu anda yüklenemedi. Supabase bağlantısını ve RLS SELECT iznini kontrol edin.';
  }
 }
+// Only current Supabase products can enter the basket or checkout.
+// Keep local images for display when a catalog image URL is missing.
+const doraLocalImagesById=new Map(products.map(p=>[Number(p.id),p.img]));
+const doraLocalImagesByName=new Map(products.map(p=>[String(p.name).toLocaleLowerCase('tr-TR'),p.img]));
+products=[];
+render();
+loadSupabaseProducts();
 /* Önizleme: canlı Supabase ürünlerini değiştirme veya yükleme */
 </script></body></html>
