@@ -8,7 +8,17 @@ async function callback(request, env) {
     const attempts = await db(env, `payment_attempts?select=*&token=eq.${encodeURIComponent(token)}&limit=1`);
     const attempt = attempts?.[0];
     if (!attempt) return html('İşlem bulunamadı', 'Lütfen destek ekibimizle iletişime geçin.');
-    if (attempt.status === 'paid') return html('Ödeme alındı', 'Siparişiniz daha önce başarıyla kaydedildi.');
+    if (attempt.status === 'paid') {
+      // Reconcile orders created before payment status was explicitly persisted.
+      if (attempt.payment_id) {
+        await db(env, `orders?payment_attempt_id=eq.${attempt.id}`, {
+          method: 'PATCH',
+          headers: { Prefer: 'return=minimal' },
+          body: JSON.stringify({ payment_status: 'paid', iyzico_payment_id: String(attempt.payment_id) }),
+        });
+      }
+      return html('Ödeme alındı', 'Siparişiniz daha önce başarıyla kaydedildi.');
+    }
 
     const payment = await iyzico(env, '/payment/iyzipos/checkoutform/auth/ecom/detail', {
       locale: 'tr', conversationId: attempt.id, token,
@@ -29,7 +39,13 @@ async function callback(request, env) {
       return html('İşlem kontrol ediliyor', 'Ödeme sonucu kesinleştirilemedi. Yeniden ödeme yapmadan önce destek ekibimizle iletişime geçin.');
     }
 
-    const order = { ...attempt.order_data, payment_attempt_id: attempt.id, payment_id: String(payment.paymentId) };
+    const order = {
+      ...attempt.order_data,
+      payment_attempt_id: attempt.id,
+      payment_id: String(payment.paymentId),
+      payment_status: 'paid',
+      iyzico_payment_id: String(payment.paymentId),
+    };
     await db(env, 'orders', {
       method: 'POST',
       headers: { Prefer: 'resolution=ignore-duplicates,return=minimal' },
