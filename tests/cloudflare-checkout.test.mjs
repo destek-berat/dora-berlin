@@ -6,7 +6,7 @@ import { onRequestPost as callback } from '../functions/api/checkout-callback.js
 globalThis.crypto ||= webcrypto;
 const env = {
   SUPABASE_URL: 'https://db.example.test',
-  SUPABASE_SECRET_KEY: 'test-secret',
+  SUPABASE_SECRET_KEY: 'sb_secret_test',
   IYZICO_API_KEY: 'sandbox-test-key',
   IYZICO_SECRET_KEY: 'sandbox-test-secret',
 };
@@ -23,6 +23,10 @@ const attemptedPayments = [];
 
 globalThis.fetch = async (resource, options) => {
   const url = String(resource);
+  if (url.startsWith('https://db.example.test')) {
+    assert.equal(options.headers.apikey, env.SUPABASE_SECRET_KEY);
+    assert.equal('Authorization' in options.headers, false);
+  }
   if (url.startsWith('https://db.example.test/rest/v1/products')) {
     return Response.json([{ id: 7, name: 'Test Çanta', price: 1195, stock: 10, is_active: true }]);
   }
