@@ -9,6 +9,7 @@ mkdirSync(output, { recursive: true });
 for (const name of [
   'index.html', 'admin.html', 'gizlilik-politikasi.html',
   'hakkimizda.html', 'mesafeli-satis-sozlesmesi.html', 'teslimat-iade.html',
+  'favicon.ico',
 ]) {
   if (!existsSync(name)) throw new Error(`Eksik site dosyası: ${name}`);
   cpSync(name, join(output, name));
