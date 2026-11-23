@@ -117,9 +117,9 @@ a,button{-webkit-tap-highlight-color:transparent}
 .empty strong{display:block;font:500 47px var(--display);margin:20px 0 8px}
 .empty p{line-height:1.8;margin-bottom:23px}
 .empty button{border:1px solid #4a3025;background:#4a3025;color:white;font:600 10px var(--sans);letter-spacing:.8px;padding:15px 22px;cursor:pointer}
-.atelier-divider{background:#e9dfd1;padding:90px 4vw;text-align:center;color:#6a5543}
+.atelier-divider{background:#e9dfd1;padding:48px 4vw;text-align:center;color:#6a5543}
 .atelier-divider span{font:700 9px var(--sans);letter-spacing:2.9px}
-.atelier-divider p{font:400 clamp(64px,7.5vw,122px)/.94 var(--display);letter-spacing:-1px;color:#3a2b23;margin:26px 0}
+.atelier-divider p{font:400 clamp(29px,3.2vw,50px)/1.15 var(--display);letter-spacing:-.3px;color:#3a2b23;margin:16px 0}
 .atelier-divider em{color:#9a7556}
 .story{display:grid;grid-template-columns:1.07fr .93fr;background:#30221b;color:#f2e8db}
 .story .story-image{width:100%;min-height:510px;overflow:hidden}
@@ -262,8 +262,8 @@ footer.site-footer{background:#f0eae2;color:#352820;padding:75px 5.4vw 0;font:40
 .product .meta h3{font-size:23px;padding-right:0;margin:6px 0 9px}
 .product .price{position:static;display:block;margin-top:10px;font-size:11px}
 .product .meta p{font-size:10px}
-.atelier-divider{padding:65px 22px}
-.atelier-divider p{font-size:clamp(56px,13vw,80px)}
+.atelier-divider{padding:34px 22px}
+.atelier-divider p{font-size:clamp(26px,7vw,39px)}
 .story{display:flex;flex-direction:column}
 .story .story-image{min-height:0;height:320px}
 .story img{min-height:0;max-height:none;height:100%}
