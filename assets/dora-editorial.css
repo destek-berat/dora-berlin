@@ -140,20 +140,30 @@ a,button{-webkit-tap-highlight-color:transparent}
 .value-icon{font:400 35px var(--display);color:#b79373;margin:6px 0 14px}
 .values h3{font:500 37px var(--display);margin:0 0 11px}
 .values p{font:400 12px/1.9 var(--sans);color:#8a7968;margin:0;max-width:320px}
-footer.site-footer{padding:80px 5vw 34px;background:#241a16;color:#e9ded2;font:400 12px var(--sans)}
-.site-footer .footer-heading{display:flex;align-items:end;justify-content:space-between;padding-bottom:50px;border-bottom:1px solid #665146;gap:35px}
-.site-footer .footer-wordmark{display:flex;align-items:center;gap:20px}
-.site-footer .footer-wordmark img{width:72px;height:80px;object-fit:contain;filter:brightness(0) invert(.8) sepia(.15)}
-.site-footer .footer-wordmark strong{display:block;font:400 clamp(42px,4.1vw,75px)/.8 var(--display);letter-spacing:3px;white-space:nowrap}
-.site-footer .footer-wordmark span{display:block;margin-top:15px;font:600 8px var(--sans);letter-spacing:3px;color:#bda28b}
-.site-footer .footer-motto{font:400 45px/.96 var(--display);text-align:right;white-space:nowrap;color:#d6c2b0}
-.site-footer .footer-motto em{color:#a88970}
-.site-footer .footgrid{grid-template-columns:1.5fr .7fr 1fr .9fr;gap:45px;margin-top:55px}
-.site-footer .foot-label{display:block;letter-spacing:2px;font:700 9px var(--sans);color:#b99a7e;margin-bottom:25px}
-.site-footer .footgrid p{margin:0 0 14px;font:400 12px/1.9 var(--sans);color:#b9a99a}
-.site-footer .footgrid a{color:#d8c9b9;text-decoration:none;transition:color .2s}
-.site-footer .footgrid a:hover{color:white;text-decoration:underline}
-.site-footer .footer-bottom{border-top:1px solid #5d493d;margin-top:66px;padding-top:22px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;color:#a58e7a;font:600 9px var(--sans);letter-spacing:1px;line-height:1.7}
+
+/* Refined, understated DORA BERLIN footer */
+footer.site-footer{background:#f0eae2;color:#352820;padding:75px 5.4vw 0;font:400 12px var(--sans);border-top:1px solid #ded2c5}
+.site-footer .footer-inner{max-width:1460px;margin:0 auto}
+.site-footer .footer-layout{display:grid;grid-template-columns:minmax(220px,1.6fr) minmax(170px,1fr) minmax(170px,1.05fr) minmax(160px,.92fr);gap:clamp(26px,4vw,88px);padding-bottom:76px}
+.site-footer .footer-intro{display:flex;flex-direction:column;align-items:flex-start;padding-right:15px}
+.site-footer .footer-logo{display:inline-flex;align-items:center;gap:14px;text-decoration:none;color:#352820}
+.site-footer .footer-logo img{display:block;width:49px;height:55px;object-fit:contain;opacity:.83}
+.site-footer .footer-logo span{display:flex;flex-direction:column;gap:5px;line-height:1}
+.site-footer .footer-logo strong{font:500 42px/.83 var(--display);letter-spacing:4px}
+.site-footer .footer-logo small{font:600 9px/1.4 var(--sans);letter-spacing:6.3px}
+.site-footer .footer-intro>p{font:400 14px/1.8 var(--sans);color:#826b5c;margin:25px 0 27px;max-width:255px}
+.site-footer .footer-contact{display:inline-flex;gap:12px;align-items:center;color:#422f27;text-decoration:none;border-bottom:1px solid #b79b85;padding-bottom:8px;font:600 11px/1.5 var(--sans)}
+.site-footer .footer-contact span{color:#916e55;font-size:16px}
+.site-footer .footer-column{display:flex;flex-direction:column;align-items:flex-start;gap:13px}
+.site-footer .footer-column h2{font:700 10px/1.4 var(--sans);letter-spacing:1.65px;color:#8c6f59;margin:8px 0 15px}
+.site-footer .footer-column a{font:500 12px/1.6 var(--sans);color:#4d4037;text-decoration:none;transition:color .2s ease,border-color .2s ease}
+.site-footer .footer-column a:hover,.site-footer .footer-column a:focus-visible{color:#9a7356;text-decoration:underline;text-underline-offset:4px}
+.site-footer .footer-help p{font:400 12px/1.9 var(--sans);color:#7d6a5d;margin:-3px 0 10px}
+.site-footer .footer-help a span{margin-left:6px;color:#977255}
+.site-footer .footer-bottom{display:flex;align-items:center;justify-content:space-between;gap:25px;margin:0;padding:21px 0 25px;border-top:1px solid #d9c9b9;color:#826f62;font:500 10px/1.65 var(--sans);letter-spacing:.1px}
+.site-footer .footer-bottom a{text-decoration:none;color:#6d5343;font:700 9px var(--sans);letter-spacing:1.3px;white-space:nowrap}
+.site-footer .footer-bottom a:hover{text-decoration:underline}
+.site-footer .footer-disclosure{max-width:550px;text-align:center}
 .drawer footer,.checkout footer{font-family:var(--sans)}
 .drawer .primary{margin-top:10px}
 .modal-content h2{font-family:var(--display);font-size:50px}
@@ -190,7 +200,7 @@ footer.site-footer{padding:80px 5vw 34px;background:#241a16;color:#e9ded2;font:4
 .story article{padding:55px 5vw}
 .story h2{font-size:64px}
 .story-topline{top:-25px}
-.site-footer .footgrid{grid-template-columns:repeat(2,1fr)}
+
 }
 @media(max-width:640px){
 .top{display:flex;justify-content:center;min-height:31px;padding:8px 12px;font-size:8px;letter-spacing:1px}
@@ -267,13 +277,22 @@ footer.site-footer{padding:80px 5vw 34px;background:#241a16;color:#e9ded2;font:4
 .values>div:first-child{border-top:1px solid #d9cabc}
 .values h3{font-size:34px}
 .value-icon{margin:5px 0 6px}
-footer.site-footer{padding:65px 24px 30px}
-.site-footer .footer-heading{flex-direction:column;align-items:flex-start;gap:27px;padding-bottom:30px}
-.site-footer .footer-wordmark img{width:46px;height:52px}
-.site-footer .footer-wordmark strong{font-size:48px}
-.site-footer .footer-motto{font-size:41px;text-align:left}
-.site-footer .footgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:25px 22px;margin-top:36px}
-.site-footer .footer-bottom{margin-top:36px;flex-direction:column;gap:8px}
+
+footer.site-footer{padding:56px 22px 0}
+.site-footer .footer-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:42px 22px;padding-bottom:48px}
+.site-footer .footer-intro{grid-column:1/-1}
+.site-footer .footer-logo img{width:41px;height:48px}
+.site-footer .footer-logo strong{font-size:38px}
+.site-footer .footer-logo small{font-size:8px;letter-spacing:5.5px}
+.site-footer .footer-intro>p{margin:18px 0 17px;font-size:12px}
+.site-footer .footer-contact{font-size:11px}
+.site-footer .footer-column{gap:12px}
+.site-footer .footer-column h2{margin:0 0 7px;font-size:9px}
+.site-footer .footer-column a{font-size:11px}
+.site-footer .footer-help{grid-column:1/-1}
+.site-footer .footer-help p{font-size:11px}
+.site-footer .footer-bottom{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:22px 0 25px;font-size:9px}
+.site-footer .footer-disclosure{text-align:left}
 .empty{padding:50px 18px!important}
 .empty strong{font-size:39px}
 }
