@@ -305,3 +305,13 @@ footer.site-footer{padding:56px 22px 0}
 @media(prefers-reduced-motion:reduce){
 .hero .primary,.cat.category-card,.category-card .category-form,.product .photo img,.nav .actions button{transition:none!important}
 }
+
+
+/* Footer layout recovery: independent full-width block after story */
+.site-footer{display:block;position:relative;clear:both;width:100%;max-width:100%;min-width:0}
+.site-footer .footer-inner{width:100%;max-width:1460px}
+.site-footer .footer-layout>*{min-width:0}
+.site-footer .footer-column a{overflow-wrap:anywhere}
+@media(min-width:641px) and (max-width:1090px){
+.site-footer .footer-layout{grid-template-columns:repeat(2,minmax(0,1fr));gap:43px 42px}
+}
