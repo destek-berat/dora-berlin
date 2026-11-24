@@ -5,7 +5,7 @@ if(window.__doraMenu) return;
 window.__doraMenu=true;
 const nav=document.querySelector("nav.nav")||document.querySelector("header nav")||document.querySelector("nav")||document.querySelector("header");
 if(!nav) return;
-const n=x=>String(x||"").toLocaleLowerCase("tr-TR").trim().replace(/^\s*(kadın|bayan)\s+/,"").replace(/\s+/g," ");
+const n=x=>String(x||"").toLocaleLowerCase("tr-TR").trim().replace(/^[♡♥]\s*/,"").replace(/^\s*(kadın|bayan)\s+/,"").replace(/\s+/g," ");
 const isAll=x=>/^(hepsi|tüm ürünler|koleksiyon)$/.test(n(x));
 const isCat=x=>isAll(x)||/^(deri kemer|deri çanta|çanta süsleri|kürk şapka|çantalar|deri ceketler|ayakkabılar|cüzdanlar|aksesuarlar|favoriler|♡ favoriler)$/.test(n(x));
 const css=[
